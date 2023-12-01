@@ -9,6 +9,27 @@ jobs:
       full-test:  
         runs-on: ubuntu-20.04
         steps:
+          - name: Clean diskspace
+            run: |
+              df -h;
+              sudo apt-get update;
+              sudo apt-get remove --purge --autoremove --yes \
+                dotnet* mono* libmono* temurin* powershell \
+                libruby* ruby* php7* php8* hhvm \
+                llvm* libllvm* clang* libclang* \
+                azure* google-cloud* apache2* podman* kubectl \
+                microsoft-edge* google-chrome* firefox \
+                mongodb* mysql* libmysql* \
+                r-base* r-cran* r-doc* r-recommended;
+              sudo apt-get clean;
+              sudo rm -rf \
+                /etc/{mono,mysql,php} \
+                /opt/{az,microsoft} \
+                /usr/lib/{heroku,R} \
+                /usr/local/lib/{android,node_modules} \
+                /usr/local/share/{powershell,chromium} \
+                /usr/share/{dotnet,kotlinc,miniconda,php,swift} /usr/share/az_*;
+              df -h
           - uses: actions/checkout@v3
             with:
               clean: false
